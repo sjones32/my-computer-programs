@@ -1,0 +1,345 @@
+/*
+ * graduation2.hpp
+ *
+ *  Created on: Jul 15, 2015
+ *      Author: sjones32
+ */
+
+#ifndef GRADUATION2_HPP_
+#define GRADUATION2_HPP_
+
+#include <stdlib.h>
+#include <time.h>
+#include <string>
+#include <iostream>
+#include <iterator>
+#include <map>
+
+class bunny{
+    public:
+        std::string sex;
+        std::string color;
+        int age;
+        std::string named;
+        bool rMVBB;
+    public:
+
+        bunny();
+        std::string getSex();
+        std::string getColor();
+        int getAge();
+        std::string getName();
+        bool rMVB();
+
+        void reconstructBunny(bunny bun);
+        int ageChanger(bunny(byb),int updateAge);
+};
+bunny::bunny(){
+  sex =  getSex();
+  color = getColor();
+  age = getAge();
+  named = getName();
+  rMVBB = rMVB();
+}
+void bunny::reconstructBunny(bunny bun){
+  sex =  getSex();
+  color = getColor();
+  age = getAge();
+  named = getName();
+  rMVBB = rMVB();
+}
+std::string  bunny::getSex()
+{
+    int choice = rand() % 10;
+
+    if (choice < 5)
+        sex= "female";
+        else
+            sex = "male";
+    return sex;
+}
+std::string bunny::getColor()
+{
+    int choice = rand() % 3;
+
+    switch(choice)
+    {
+        case 1:
+            color = "white";
+            break;
+        case 2:
+            color = "brown";
+            break;
+        case 3:
+            color = "black";
+            break;
+        default:
+            color = "spotted";
+            break;
+    }
+    return color;
+}
+int bunny::getAge()
+{
+    int ages = rand() % 10;
+    switch(ages)
+      {
+
+        case 0:
+            age = 4;
+            break;
+          case 1:
+              age = 1;
+              break;
+          case 2:
+              age = 2;
+              break;
+          case 3:
+              age = 3;
+              break;
+          case 4:
+            age = 7;
+            break;
+        case 5:
+            age = 3;
+            break;
+        case 6:
+            age = 4;
+            break;
+        case  7:
+            age = 5;
+            break;
+        case 8: age =6;
+            break;
+        default:
+            age = 1;
+            break;
+      }
+   return age;
+}
+std::string bunny::getName()
+{
+    int name = rand() % 5;
+    std::string names;
+
+    if( sex == "male"){
+    switch(name){
+        case 0:
+           names = "doug";
+           break;
+       case 1:
+           names = "andrew";
+           break;
+       case 2:
+                  names = "Richie";
+                  break;
+       case 3:
+                  names = "Wombat";
+                  break;
+       case 4:
+           names = "bob";
+           break;
+        }
+     }
+     else if (sex == "female"){
+     switch(name){
+         case 0:
+             names = "sally";
+             break;
+       case 1:
+             names = "Patricia";
+             break;
+        case 2:
+             names = "christina";
+             break;
+        case 3:
+             names = "samantha";
+             break;
+        case 4:
+             names = "Beatrice";
+             break;}
+     }
+     named = names;
+     return named;
+}
+bool bunny::rMVB()
+{
+    int rabid = rand()%100;
+
+    if(rabid <=2)
+    {
+      return rMVBB = 0;
+    }
+    else{
+      return rMVBB = 1;
+    }
+}
+
+class MapOfBunnies{
+    private:
+        friend class bunny;
+        std::map<double, bunny> bunnyMap;
+
+    public: 
+        std::map<double, bunny>::iterator iter;
+        std::map<double, bunny>::iterator temp;
+        MapOfBunnies(); 
+
+        void AddNode();
+        void PrintMap();
+        void reproduction();
+        void ageChanger();
+        void deleteBunny(int i);
+        void rmvbbChanges();
+        int checkEmpty();
+        void rabbitKull();
+        int mySize();
+        bool checkForEnd();
+};
+MapOfBunnies::MapOfBunnies(){
+}
+void MapOfBunnies::ageChanger(){
+    temp = iter;
+
+    for(iter = bunnyMap.begin(); iter!=bunnyMap.end(); ++iter)
+       {
+           if(iter->second.age < 10 && iter->second.rMVBB != 0){
+                 iter->second.age = iter->second.age + 1;
+               }
+           if(iter->second.age < 25 && iter->second.rMVBB == 0){
+                iter->second.age = iter->second.age + 1;
+              }
+           if ( iter->second.age == 10&& iter->second.rMVBB != 0){
+               deleteBunny(iter->first);
+           }
+           if ( iter->second.age == 25 && iter->second.rMVBB == 0){
+               deleteBunny(iter->first);
+           }
+     }
+   }
+void MapOfBunnies::reproduction(){
+    int countered = 0;
+
+    if (bunnyMap.size() > 1000){
+           std::cout << "WARNING: Too many bunnies, not enough food... 700 have died."<< std::endl;
+           rabbitKull();
+           countered = 7;
+     }
+   if(countered!=7)
+     {
+        int counter=0;
+        int counter2=0;
+        for(iter = bunnyMap.begin(); iter!=bunnyMap.end(); ++iter)
+          {
+                if(iter->second.age > 2 && iter->second.sex == "male")
+                {
+                    ++counter;
+                }
+                if(iter->second.age >2 && iter->second.sex == "female")
+                {
+                    ++counter2;
+                }
+          }
+          if(counter >= 1 && counter2>=1){
+              for(int i= 0; i<=counter2; i++){
+                   AddNode();
+              }
+            }
+          else if (counter2 == 0 || counter ==0){
+             std::cout << "Bunnies can't reproduce" <<std::endl;
+            }
+     }
+}
+void MapOfBunnies::AddNode(){
+     double part=0;
+     bunny z;
+     if (bunnyMap.empty() == true){
+        // std::cout << "First bunny" <<std::endl;
+        // std::cout << "PART " << part << " Size "<< bunnyMap.size() << std::endl;
+           bunnyMap[part] = z;
+         }
+     else{
+      //   std::cout << "PART " << part << " Size "<< bunnyMap.size() << std::endl;
+         part = bunnyMap.size();
+         bunnyMap[part] = z;
+         //std::cout << "New bunny at" << part << std::endl;
+     }
+
+ }
+void MapOfBunnies::rmvbbChanges(){
+        int count;
+        int counttemp = 0;
+
+        for(iter = bunnyMap.begin(); iter!=bunnyMap.end(); ++iter)
+        {
+            if( iter->second.rMVBB==0 ){
+                count++;
+            }
+         }
+        iter = bunnyMap.begin();
+
+        while(iter!=bunnyMap.end()){
+                if(counttemp <count){
+                if(iter->second.rMVBB==0 ){}
+                else if(iter->second.rMVBB==1)
+                {
+                    iter->second.rMVBB=0;
+                }
+                    counttemp++;
+            }
+            iter++;
+        }
+   }
+int MapOfBunnies::checkEmpty(){
+    iter = bunnyMap.begin();
+    int counttemp;
+    while(iter!=bunnyMap.end()){
+              counttemp++;
+              iter++;
+    }
+        return counttemp;
+}
+void MapOfBunnies::deleteBunny(int i){
+    std::cout << "*********deleting "
+              << bunnyMap[i].named << " "
+              << bunnyMap[i].age   << " "
+              << bunnyMap[i].color << " "
+              << bunnyMap[i].sex   << " "
+              << bunnyMap[i].rMVBB << std::endl;
+    int last = bunnyMap.size() - 1;
+    bunnyMap.erase(i);
+    bunnyMap[i] = bunnyMap[last];
+    bunnyMap[i].age +=1;
+    bunnyMap.erase(last);
+   }
+void MapOfBunnies::PrintMap(){
+    temp = bunnyMap.begin();
+    for(iter = bunnyMap.begin(); iter!=bunnyMap.end(); ++iter)
+       {
+             std::cout << iter->second.named << " "
+                       << iter->second.age << " "
+                       << iter->second.color << " "
+                       << iter->second.sex << " "
+                       << iter->second.rMVBB << " "
+                       << std::endl;
+        }
+}
+void MapOfBunnies::rabbitKull(){
+   int size = bunnyMap.size();
+   int x = size-700;
+   for(int i = x ; i < size; i++)
+   {
+       bunnyMap.erase(i);
+   }
+
+}
+bool MapOfBunnies::checkForEnd(){
+    if(bunnyMap.empty() == true){
+        return true;
+    }
+    else
+        return false;
+   }
+int MapOfBunnies::mySize(){
+    return bunnyMap.size();
+}
