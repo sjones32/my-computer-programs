@@ -1,0 +1,51 @@
+/*
+ * graduation.cpp
+http://www.cplusplus.com/forum/articles/12974/
+ *
+ *  Created on: Jun 16, 2015
+ *      Author: sjones32
+ */
+#include "graduation2.hpp"
+
+#include <stdlib.h>
+#include <iostream>
+#include <ctime>
+#include <list>
+
+int main()
+{
+    srand(time(NULL));
+    MapOfBunnies(X);
+    for(double i=1; i!=6; ++i)
+    {
+             X.AddNode();
+    }
+
+    std::cout << "Meet your Bunnies" << std::endl;
+    X.PrintMap();
+    int answer;
+
+    std::cout << "Would you like to continue (1 yes, Any key for no" << std::endl;
+    std::cin >> answer;
+
+    while(answer ==1){
+
+              X.reproduction();
+              X.ageChanger();
+              X.rmvbbChanges();
+              X.PrintMap();
+            std::cout << "Total bunnies " << X.mySize() << std::endl;
+            if (X.checkForEnd() == true)
+             {
+                 std::cout << "All bunnies gone, sorry for your loss" << std::endl;
+                 break;
+             }
+
+            std::cout << "Would you like to continue (1 yes, Any key for no" << std::endl;
+            std::cin >> answer;
+
+            if(answer != 1)
+                std::cout << "_________ New round_____________ " << std::endl;
+    }
+    return 0;
+}
