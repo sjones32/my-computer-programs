@@ -1,0 +1,190 @@
+SchoolQuiz.cpp
+
+#include <iostream>
+#include <string>
+#include <stdlib.h>
+
+int main() {
+    std::string name;
+
+    int age, favClass, animal;
+    std::cout << "Welcome to school \n" << std::endl;
+    std::cout  << "\n""What is your name?"<< std::endl;
+    std::cin >> name;
+    std::cin.get();
+
+    std::cout  << "\n""How old are you?"<< std::endl;
+    std::cin >> age;
+    std::cin.get();
+
+    std::cout << "\n""Which is your most favorite class?(1 - Science, 2 - History,3 - Math, 4 - Art, 5- Lunch, 6- All" << std::endl;
+    std::cin >> favClass;
+    std::cin.get();
+
+    std::cout << "\n" "Which is your most favorite animal? (1 - Cat,2 - Dog, 3 - Bird, 4 - Horse,5 - Fish, 6 - All)"<< std::endl;
+    std::cin >> animal;
+    std::cin.ignore();
+
+    std::string answer;
+    std::cout << "\n" "Would you like to see a personality observation based on your answers? (yes/no) "<< std::endl;
+
+    std::getline(std::cin, answer);
+    if (answer == "yes")
+    {
+        std::cout  << "\n""From name: All names are great names unless you are mean about other peoples names"<< std::endl;
+       if (age > 0)
+       {
+           std::cout << "\n" "From age: With time you will countinue to do great things" << std::endl;
+        }
+
+
+       switch (animal)
+       {
+           case 1:
+               std::cout << "From animal: You're too cool for school" "\n";
+               break;
+           case 2:
+               std::cout << "From animal: You greet everyone you see""\n";
+               break;
+           case 3:
+               std::cout << "From animal: You are a social butterfly""\n";
+               break;
+           case 4:
+               std::cout << "From animal: You hold your head up high""\n";
+               break;
+           case 5:
+               std::cout << "From animal: You swim through crowds""\n";
+               break;
+           case 6:
+               std::cout << "From animal: You are very indecisive""\n";
+               break;
+
+        }
+       switch (favClass)
+              {
+                  case 1:
+                      std::cout << "From Favorite Class: You want to know how things work""\n";
+                      break;
+                  case 2:
+                      std::cout << "From Favorite Class: The past helps you navigate the future""\n";
+                      break;
+                  case 3:
+                      std::cout << "From Favorite Class: You're a very logical thinker""\n";
+                      break;
+                  case 4:
+                      std::cout << "From Favorite Class: You are super creative""\n";
+                      break;
+                  case 5:
+                      std::cout << "From Favorite Class: You love to chat with your friends""\n";
+                      break;
+                  case 6:
+                      std::cout << "From Favorite Class: You are very indecisive""\n";
+                      break;
+
+               }
+    }
+    else
+    {
+        std::cout << "\n" "Maybe next time party pooper" << std::endl;
+    }
+return 0;
+}
+
+Pancake_Glutton.cpp
+
+#include <iostream>
+#include <time.h>
+#include <string>
+
+#include <stdlib.h>
+using namespace std;
+#include <stdio.h>
+#include <algorithm>
+#include <list>
+int main ()
+{
+    int Person[10];
+    cout << "How many Pancakes did Person's 1-10 eat?" <<endl;
+    int numberOfPerson = 1, i;
+    int smallest, largest;
+    for(i=0; i<10; i++)
+    {
+
+        int atePancakes;
+        cout << "Person" << numberOfPerson << endl;
+        cin >> atePancakes;
+        Person[i] = atePancakes;
+        numberOfPerson++;
+
+    }
+
+
+
+
+    int j, h;
+    for (int k=0;k<10;k++)
+    {
+
+        if (Person[k]>largest)
+        {
+            largest= Person[k];
+            j= k+1;
+        }
+
+    }
+    for (int l=0;l<10;l++)
+    {
+
+        if (Person[l]< smallest)
+             {
+                 smallest=Person[l];
+                 h= l+1;
+             }
+
+    }
+    cout <<"Person " << j << " ate the most pancakes which is" <<largest <<endl;
+    cout <<"Person " << h << " ate the least pancakes which is" <<smallest <<endl;
+
+    std::list<int> pancakes;
+
+    for(int s=10; s<10; s--)
+    {
+        if(Person[s] > largest)
+        {
+             pancakes= Person[s];
+        }
+    cout << "Person" << s << "ate" << pancakes << endl;
+    }
+
+    return 0;
+}
+
+Cola Machine
+
+#include <iostream>
+#include <time.h>
+#include <string>
+
+#include <stdlib.h>
+using namespace std;
+#include <stdio.h>
+
+int main ()
+{
+    int numberOfTimes=0, i,input;
+    int numberOfTimes2;
+    cout << "Please enter any number other than " << numberOfTimes << endl;
+                  cin >> input;
+                  cin.get();
+   while (numberOfTimes != input)
+    {
+        ++numberOfTimes;
+        cout <<"You've been asked " << numberOfTimes <<" times \n"
+             << "Please enter any number other than " << numberOfTimes <<endl;
+        cin >> input;
+        cin.get();
+    }
+
+        cout << "You caved!" <<endl;
+
+}
