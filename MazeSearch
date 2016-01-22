@@ -1,0 +1,41 @@
+import javax.swing.JOptionPane;
+
+//********************************************************************
+//  MazeSearch.java
+//
+//  Demonstrates recursion.
+//********************************************************************
+
+public class MazeSearch
+{
+   //-----------------------------------------------------------------
+   //  Creates a new maze, prints its original form, attempts to
+   //  solve it, and prints out its final form.
+   //-----------------------------------------------------------------
+   public static void main (String[] args)
+   {
+      Maze labyrinth = new Maze();
+      String srow, scol;
+		 
+	  srow = JOptionPane.showInputDialog ("Enter how many a rows");
+	  int row = (int) Float.parseFloat(srow);
+	  
+	  scol = JOptionPane.showInputDialog ("Enter how many columns");
+	  int column = (int) Float.parseFloat(scol);
+	  labyrinth.set(row,column);
+	  
+      
+      while(labyrinth.traverse(0, 0)==false)
+      {
+    	  labyrinth.gridCreate();
+      }
+      System.out.println ("The maze was successfully traversed! Here is the raw data");
+      System.out.println (labyrinth);
+      
+      String x;
+      System.out.println (" Here is the graphical represantation");
+      x= labyrinth.toMazeString();
+      System.out.println (x);
+
+   }
+}
