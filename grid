@@ -1,0 +1,31 @@
+import java.util.Random;
+
+import javax.swing.JOptionPane;
+
+public class Grid {
+			int[][] grid = {{},{}};
+	
+	
+		   String srow;
+		   String scol;{
+			 
+		   srow = JOptionPane.showInputDialog ("Enter how many a rows (1-8)");
+		   int row = (int) Float.parseFloat(srow);
+		   System.out.println(row);
+		   scol = JOptionPane.showInputDialog ("Enter how many columns (1-8)");
+		   int column = (int) Float.parseFloat(scol);
+		   System.out.println(column);
+		   Random rn = new Random();
+		   
+		   for (int i= 0; i< row; i++)
+		   {
+			   System.out.println("here");
+			   for (int j = 0; j<column; j++)
+			   {
+				   System.out.println("heres");
+				   grid[i][j] = rn.nextInt(1);
+			   }   
+		   }
+		  System.out.print(grid);
+}
+}
