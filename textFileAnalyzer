@@ -1,0 +1,377 @@
+import java.awt.*;
+import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.io.*;
+import java.util.*;
+import java.lang.Math.*;
+
+public class TextAnalyzer {
+
+	public static int getCount(String word,
+					TreeMap<String, Integer> frequencyData)
+	{
+		if (frequencyData.containsKey(word))
+		{
+			return frequencyData.get(word);
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	public static void countWord(String word,
+					TreeMap<String, Integer> frequencyData)
+	{
+		int count = getCount(word, frequencyData) + 1;
+		frequencyData.put(word, count);
+	}
+
+	public static void printAllCounts(TreeMap<String, Integer> frequencyData)
+	{
+		System.out.println("-----------------------------------------------");
+		System.out.println("    Words         Count");
+
+		for (String word : frequencyData.keySet())
+		{
+			System.out.printf("%-15s    %s\n", word, frequencyData.get(word));
+		}
+
+		System.out.println("-----------------------------------------------");
+	}
+	
+	public static <K,V extends Comparable<? super V>> SortedSet<Map.Entry<K,V>> entriesSortedByValues(Map<K,V> map) {
+        SortedSet<Map.Entry<K,V>> sortedEntries = new TreeSet<Map.Entry<K,V>>(
+            new Comparator<Map.Entry<K,V>>() {
+                @Override public int compare(Map.Entry<K,V> e1, Map.Entry<K,V> e2) {
+                    int res = e2.getValue().compareTo(e1.getValue());
+                    return res != 0 ? res : 1; // Special fix to preserve items with equal values
+                }
+            }
+        );
+        sortedEntries.addAll(map.entrySet());
+        return sortedEntries;
+    }
+
+	public static String printAllCountsSorted(TreeMap<String, Integer> frequencyData)
+	{
+		String sorted="";
+		sorted+="-----------------------------------------------\n";
+		sorted+="Words: Count\n";
+
+		for (Map.Entry<String, Integer> entry : entriesSortedByValues(frequencyData))
+		{
+			sorted+= " " + entry.getKey()+": " +entry.getValue() + "\n";
+		}
+
+		sorted+="-----------------------------------------------";
+		
+		return sorted;
+	}
+    public static void main(String[] args) {
+        new TextAnalyzer();
+    }
+    JFrame frame = new JFrame("Text Analyzer");
+    JFrame frameAn = new JFrame("Results");
+    TextDisplay	display = new TextDisplay();
+
+    String	fileName;
+
+    //Scanner file = new Scanner()
+    public TextAnalyzer() {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                    ex.printStackTrace();
+                }
+
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.add(new TestPane());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocation(300, 42);
+                
+               
+                
+            //    frame.add(BorderLayout.NORTH, new JLabel("File name and Size Appears Here"));
+               
+            }
+        });
+    }
+    
+  
+    public class TestPane extends JPanel {
+
+        private JButton open;
+       
+        private JTextArea textArea;
+        private JFileChooser chooser;
+
+        public TestPane() {
+            setLayout(new BorderLayout());
+            open = new JButton("Open");
+            textArea = new JTextArea(20, 40);
+            add(new JScrollPane(textArea));
+            add(open, BorderLayout.SOUTH);
+            
+            textArea.setEditable(false);
+         
+            open.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (chooser == null) {
+                        chooser = new JFileChooser();
+                        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                        chooser.setAcceptAllFileFilterUsed(false);
+                        chooser.addChoosableFileFilter(new FileFilter() {
+                            @Override
+                            public boolean accept(File f) {
+                                return f.isDirectory() || f.getName().toLowerCase().endsWith(".txt"); 
+                            }
+
+                            @Override
+                            public String getDescription() {
+                                return "Text Files (*.txt)";
+                            }
+                         
+                        });
+                    }
+
+                    switch (chooser.showOpenDialog(TestPane.this)) {
+                        case JFileChooser.APPROVE_OPTION:
+                            try (BufferedReader br = new BufferedReader(new FileReader(chooser.getSelectedFile()))) {
+                          
+                        		String Name = chooser.getSelectedFile().getName();
+                        		frame.setTitle("Text Analyzer: File Selcted is " + Name);
+                               
+                            	
+                                textArea.setText(null);
+                                String text = null;
+                                while ((text = br.readLine()) != null) {
+                                    textArea.append(text);
+                                    textArea.append("\n");
+                                    
+                                }
+                                //textArea.setCaretPosition(0);
+                            	
+                                frameAn.setVisible(true);
+                                frameAn.setLocation(700, 42);
+                                frameAn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                                frameAn.add(display);
+                                frameAn.pack();
+                                display.getText(textArea.getText());
+                        
+                            } catch (IOException exp) {
+                                exp.printStackTrace();
+                                JOptionPane.showMessageDialog(TestPane.this, "Failed to read file", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                    }
+                }
+            });
+        }
+
+    }
+   
+    public class TextDisplay extends JPanel{
+    	// private JButton open;
+         private JTextArea secretFreq;
+         private JTextArea cat;
+         private JTextArea secretStat;
+         private JButton save;
+         private JButton savefreq;
+         private JButton savestat;
+         public TextDisplay() {
+             setLayout(new BorderLayout());
+             cat = new JTextArea(20, 40);
+             secretStat = new JTextArea();
+             secretFreq = new JTextArea();
+             secretStat.setVisible(false);
+             secretFreq.setVisible(false);
+             
+             add(new JScrollPane(cat));
+             save = new JButton("Save all Results");
+             savefreq = new JButton("Save frequencyData");
+             savestat = new JButton("Save Statistics");
+           
+	        JPanel panel = new JPanel();
+	 		panel.add(save);
+	 		panel.add(savefreq);
+	 		panel.add(savestat);
+	 		add(panel, BorderLayout.SOUTH);
+          
+     		save.addActionListener(new ActionListener() {
+            	 JFileChooser saveFile = new JFileChooser();
+                 @Override
+                 public void actionPerformed(ActionEvent e) {
+                     
+                	 switch (saveFile.showSaveDialog(TextDisplay.this)) {
+                     case JFileChooser.APPROVE_OPTION:
+                     
+                     {
+                    	 try (BufferedWriter br = new BufferedWriter(new FileWriter(saveFile.getSelectedFile()))) {
+                         	br.write(cat.getText());
+                     }
+                    	 catch (IOException ex) {
+                         }
+                         break;
+                     }
+                     } 
+                 }
+           });
+             savefreq.addActionListener(new ActionListener() {
+            	 JFileChooser saveFile = new JFileChooser();
+                 @Override
+                 public void actionPerformed(ActionEvent e) {
+                     
+                	 switch (saveFile.showSaveDialog(TextDisplay.this)) {
+                     case JFileChooser.APPROVE_OPTION:
+                     
+                     {
+                    	 try (BufferedWriter br = new BufferedWriter(new FileWriter(saveFile.getSelectedFile()))) {
+                         	br.write(secretFreq.getText());
+                     }
+                    	 catch (IOException ex) {
+                         }
+                         break;
+                     }
+                     } 
+                 }
+           });
+             savestat.addActionListener(new ActionListener() {
+            	 JFileChooser saveFile = new JFileChooser();
+                 @Override
+                 public void actionPerformed(ActionEvent e) {
+                     
+                	 switch (saveFile.showSaveDialog(TextDisplay.this)) {
+                     case JFileChooser.APPROVE_OPTION:
+                     
+                     {
+                    	 try (BufferedWriter br = new BufferedWriter(new FileWriter(saveFile.getSelectedFile()))) {
+                         	br.write(secretStat.getText());
+                     }
+                    	 catch (IOException ex) {
+                         }
+                         break;
+                     }
+                     } 
+                 }
+           });
+ }  
+         
+         public void getText(String text){
+        	 analyzText(text);
+         }
+       
+     public void analyzText(String text)
+     {
+ 
+    	String lettersOnly = text.replaceAll("[\\W]", "");
+    	lettersOnly.toCharArray();
+    	int numChars = lettersOnly.length();
+    	int wordCount= countWord(text);
+    	float avgLength = wordLength(text);
+    	
+    	TreeMap<String, Integer> frequencyData = new TreeMap<String, Integer>( );
+
+        readWordFile(frequencyData,text); 
+     
+        String wordFrequent = printAllCountsSorted(frequencyData);
+    	int senCount = countSentence(text);
+    	float avgSenLength = sentenceLength(text);
+    	
+		String statString = "There are " + numChars + " characters. As well as " + wordCount + " words and " + senCount + " sentences!\n"; 	
+    	statString += "The average word length is  " + avgLength + " The average sentence length is  " + avgSenLength;
+    	String frequencyString = "\nThe word frequency is as follows \n" + wordFrequent ;
+    	String analysis = statString+frequencyString;
+    	
+    	cat.setText(analysis);      
+    	secretFreq.setText(frequencyString);
+    	secretStat.setText(statString);
+     }
+
+ 	public int countWord(String word) 
+ 	{ 
+ 		if (word == null) 
+ 			{ return 0; } 
+ 		String input = word.trim(); 
+ 		int count = input.isEmpty() ? 0 : input.split("\\s+").length;
+ 			return count; 
+	}
+ 	public float wordLength(String text){
+ 		if (text == null) 
+			{ return 0; } 
+        String[] strArray = text.split(" ");
+        float totalChars = 0;
+        for(String s : strArray){
+            totalChars += s.length();
+        }
+        float words = strArray.length;
+        float averageWordLength = (float)(totalChars/words);
+        Math.ceil(averageWordLength);
+
+ 		return averageWordLength;
+ 	}
+ 	public float sentenceLength(String text){
+ 		int sentenceCount=countSentence(text);
+ 		float avgLength = 0;
+    	
+ 		String[]sentenceHolder = text.split("(?i)(?<=[.?!])\\S+(?=[a-z])");
+ 		for (int i = 0; i < sentenceHolder.length; i++)
+ 		{
+ 			avgLength += countWord(sentenceHolder[i]);
+ 			
+ 		}
+        avgLength /=sentenceCount;
+    	return avgLength;
+ 	}
+ 	public int countSentence(String sentence){
+    	int sentenceCount=0;
+    	int lastIndex=0; 
+    	String SENTENCE_DELIMETERS = ".?!";
+    	for(int i=0;i<sentence.length();i++){  
+    	    for(int j=0;j<SENTENCE_DELIMETERS.length();j++){  
+    	        if(sentence.charAt(i)==SENTENCE_DELIMETERS.charAt(j)){
+    	            if(lastIndex!=i-1){
+    	                sentenceCount++;
+    	            }
+    	            lastIndex=i;
+    	        }
+    	    }
+    	}
+    	return sentenceCount;
+    }
+ 
+    public void readWordFile(TreeMap<String, Integer> frequencyData, String text)
+   {
+      Scanner wordFile;
+      String word;     
+      Integer count;   
+     
+     String newText = text.replaceAll("\\W", " ");
+     newText = newText.toLowerCase();
+     wordFile = new Scanner(newText);
+
+     while (wordFile.hasNext( ))
+      {
+          // Read the next word and get rid of the end-of-line marker if needed:
+	  word = wordFile.next();
+
+          // Get the current count of this word, add one, and then store the new count:
+          count = getCount(word, frequencyData) + 1;
+          frequencyData.put(word, count);
+      }
+      wordFile.close();
+   } 
+
+    }
+}    
+    
+
